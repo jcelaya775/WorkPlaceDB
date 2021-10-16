@@ -4,7 +4,7 @@ CREATE TABLE employee (
     salary INT,
     PRIMARY KEY (empname)
 );
-
+  
 INSERT INTO employee VALUES
     ("Steve", "Los Angeles", 45000),
     ("Jonathan", "Chicago", 50000),
@@ -21,11 +21,12 @@ CREATE TABLE works (
 );
 
 INSERT INTO works VALUES
-    ("Angela", "Development"),
-    ("Jonathan", "Business Analytics"),
-    ("Nick", "Marketing"),
-    ("Steve", "Marketing"),
-    ("Mark", "Development");
+    ("Angela", "development"),
+    ("Jonathan", "business analytics"),
+    ("Nick", "marketing"),
+    ("Steve", "marketing"),
+    ("Mark", "d
+    evelopment");
 
 CREATE TABLE unit (
     unitname VARCHAR(25),
@@ -43,7 +44,7 @@ CREATE TABLE manages (
     mgrname VARCHAR(25),
     PRIMARY KEY (empname, mgrname)
     FOREIGN KEY (empname) REFERENCES employee(empname)
-    FOREIGN KEY (mrname) REFERENCES employee(mgrname)
+    FOREIGN KEY (mgrname) REFERENCES employee(mgrname)
 );
 
 INSERT INTO manages VALUES 
@@ -54,8 +55,26 @@ INSERT INTO manages VALUES
     ("Mark", "Kevin");
 
 -- Prolem 1a)
-SELECT empname, salary, unitname
+SELECT e.empname, e.salary, w.unitname
     FROM employee e, works w
     WHERE e.empname = w.empname;
 
 -- Problem 1b)
+SELECT e.empname, e.salary, w.unitname
+    FROM employee e JOIN works w
+        on e.empname = w.empname;
+
+-- Problem 1c)
+SELECT empname, salary
+    FROM employee e 
+    WHERE empname in 
+        (SELECT empname
+            from works w);
+
+-- Problem 1d)
+SELECT empname, salary
+    FROM employee e
+    WHERE EXISTS 
+        (SELECT * 
+            FROM works w
+                WHERE e.empname = w.empname);
