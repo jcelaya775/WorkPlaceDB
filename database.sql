@@ -28,7 +28,8 @@ INSERT INTO unit VALUES
     ("Analytics", "Manhattan"),
     ("Marketing", "Chicago"),
     ("Communications", "San Francisco"),
-    ("Network Security", "Boston");
+    ("Network Security", "Boston"),
+    ("something", "Alabama");
 
 CREATE TABLE works (
     empname VARCHAR(10),
@@ -116,3 +117,28 @@ SELECT empname, city, salary * 1.10, unitname
     WHERE unitname = "Development";
 
 -- Problem 6)
+SELECT empname
+    FROM employee_units e
+    WHERE not EXISTS
+        (SELECT city
+            FROM unit u
+            WHERE city like "A%"
+         EXCEPT
+            SELECT city 
+                FROM unit u
+                    WHERE u.unitname = e.unitname);
+
+-- Problem 7)
+SELECT unitname, count(*)
+    FROM works 
+    GROUP BY unitname
+    HAVING count(*) < 5;
+
+-- Problem 8)
+SELECT empname
+	FROM employee
+    	where empname not in
+    	(SELECT empname
+         	from works);
+
+-- Problem 9)
