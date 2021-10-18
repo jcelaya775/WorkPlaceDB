@@ -15,31 +15,7 @@ INSERT INTO employee VALUES
     ("Rochelle", "Jersey City", 55000),
     ("Jamie", "Manhattan", 60000),
     ("Dennis", "San Jose", 50000),
-    ("Brianna", "Boston", 85000),
-    ("Robert", "Sacramento", 40000);
-
-CREATE TABLE works (
-    empname VARCHAR(10),
-    unitname VARCHAR(25),
-    PRIMARY KEY (empname, unitname),
-    FOREIGN KEY (empname) REFERENCES employee(empname),
-    FOREIGN KEY (unitname) REFERENCES unit(unitname)
-);
-
-INSERT INTO works VALUES
-    ("Steve", "Marketing"),
-    ("Jonathan", "Analytics"),
-    ("Jonathan", "Development"),
-    ("Angela", "Development"),
-    ("Nick", "Analytics"),
-    ("Mark", "Network Security"),
-    ("Pat", "Analytics"),
-    ("Rochelle", "Development"),
-    ("Jamie", "Development"),
-    ("Dennis", "Communications"),
-    ("Brianna", "Network Security"),
-    ("Brianna", "Development"),
-    ("Robert", "Communications");
+    ("Brianna", "Boston", 85000);
 
 CREATE TABLE unit (
     unitname VARCHAR(25),
@@ -54,22 +30,41 @@ INSERT INTO unit VALUES
     ("Communications", "San Francisco"),
     ("Network Security", "Boston");
 
+CREATE TABLE works (
+    empname VARCHAR(10),
+    unitname VARCHAR(25),
+    PRIMARY KEY (empname, unitname),
+    FOREIGN KEY (empname) REFERENCES employee(empname),
+    FOREIGN KEY (unitname) REFERENCES unit(unitname)
+);
+
+INSERT INTO works VALUES
+    ("Steve", "Marketing"),
+    ("Jonathan", "Analytics"),
+    ("Angela", "Development"),
+    ("Nick", "Analytics"),
+    ("Mark", "Network Security"),
+    ("Pat", "Analytics"),
+    ("Rochelle", "Development"),
+    ("Jamie", "Development"),
+    ("Dennis", "Communications"),
+    ("Brianna", "Network Security"),
+    ("Brianna", "Development");
+    
 CREATE TABLE manages (
     empname VARCHAR(25),
     mgrname VARCHAR(25),
-    PRIMARY KEY (empname, mgrname)
-    FOREIGN KEY (empname) REFERENCES employee(empname)
+    PRIMARY KEY (empname, mgrname),
+    FOREIGN KEY (empname) REFERENCES employee(empname),
     FOREIGN KEY (mgrname) REFERENCES employee(empname)
 );
 
 INSERT INTO manages VALUES 
     ("Jonathan", "Nick"), -- analytics
     ("Pat", "Nick"), -- analytics
-    ("Jonathan", "Brianna"), -- development
     ("Angela", "Brianna"), -- development
     ("Rochelle", "Brianna"), -- development
     ("Jamie", "Brianna"), -- development
-    ("Robert", "Dennis"), -- communications/marketing
     ("Steve", "Dennis"); -- communications/marketing
 
 -- Prolem 1a)
@@ -96,3 +91,28 @@ SELECT empname, salary
         (SELECT * 
             FROM works w
                 WHERE e.empname = w.empname);
+
+-- Problem 2)
+CREATE VIEW employee_units as 
+    SELECT e.empname, city, salary, w.unitname
+        FROM employee e JOIN works w
+            ON e.empname = w.empname;
+
+-- Problem 3)
+SELECT empname, city, salary 
+	FROM employee_units
+    	WHERE unitname = "Development"
+        	AND salary > 50000;
+
+-- Problem 4)
+SELECT empname
+    FROM employee_units e JOIN unit u
+        ON e.unitname = u.unitname
+        WHERE e.city = u.city;
+
+-- Problem 5)
+SELECT empname, city, salary * 1.10, unitname
+    FROM employee_units 
+    WHERE unitname = "Development";
+
+-- Problem 6)
