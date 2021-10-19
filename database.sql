@@ -139,9 +139,45 @@ SELECT empname
 	FROM employee
     WHERE empname NOT IN 
     (SELECT empname
-     	from works);
+     	FROM works);
 
 -- Problem 9)
-SELECT mgrname 
-    FROM employee_units
-    
+SELECT mgrname, empname
+    FROM manages m
+    where exists
+    (SELECT mgrname, city as mgrcity
+            FROM employee_units e
+            where m.empname = e.empname
+       UNION 
+            SELECT m.empname, city as empcity
+                FROM employee_units e
+				where m.empname = e.empname);
+
+SELECT distinct *
+    FROM manages m join employee_units eu
+    	on m.mgrname = eu.empname
+        	or m.empname = eu.empname
+    and exists
+    (SELECT mgrname, city as mgrcity
+            FROM employee_units e
+            where m.empname = e.empname
+       UNION 
+            SELECT m.empname, city as empcity
+                FROM employee_units e
+				where m.empname = e.empname);
+
+-- Problem 10)
+-- only selects one max
+SELECT unitname, max(num_emps)
+    FROM (SELECT unitname,  count(*) as num_emps
+            FROM employee_units
+            GROUP BY unitname);
+
+-- only works on MySQL
+SELECT unitname, count(*)
+    FROM employee_units 
+    GROUP BY unitname
+    having count(*) >= ALL
+        (SELECT count(*)
+            FROM employee employee_units
+            GROUP BY unitname);
