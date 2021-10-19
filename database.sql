@@ -76,14 +76,14 @@ SELECT e.empname, e.salary, w.unitname
 -- Problem 1b)
 SELECT e.empname, e.salary, w.unitname
     FROM employee e JOIN works w
-        on e.empname = w.empname;
+        ON e.empname = w.empname;
 
 -- Problem 1c)
 SELECT empname, salary
     FROM employee e 
-    WHERE empname in 
+    WHERE empname IN
         (SELECT empname
-            from works w);
+            FROM works w);
 
 -- Problem 1d)
 SELECT empname, salary
@@ -91,7 +91,7 @@ SELECT empname, salary
     WHERE EXISTS 
         (SELECT * 
             FROM works w
-                WHERE e.empname = w.empname);
+            WHERE e.empname = w.empname);
 
 -- Problem 2)
 CREATE VIEW employee_units as 
@@ -102,8 +102,8 @@ CREATE VIEW employee_units as
 -- Problem 3)
 SELECT empname, city, salary 
 	FROM employee_units
-    	WHERE unitname = "Development"
-        	AND salary > 50000;
+    WHERE unitname = "Development"
+        AND salary > 50000;
 
 -- Problem 4)
 SELECT empname
@@ -137,8 +137,11 @@ SELECT unitname, count(*)
 -- Problem 8)
 SELECT empname
 	FROM employee
-    	where empname not in
-    	(SELECT empname
-         	from works);
+    WHERE empname NOT IN 
+    (SELECT empname
+     	from works);
 
 -- Problem 9)
+SELECT mgrname 
+    FROM employee_units
+    
