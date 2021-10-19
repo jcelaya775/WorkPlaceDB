@@ -179,5 +179,5 @@ SELECT unitname, count(*)
     GROUP BY unitname
     having count(*) >= ALL
         (SELECT count(*)
-            FROM employee employee_units
+            FROM employee_units
             GROUP BY unitname);
