@@ -167,17 +167,11 @@ SELECT distinct *
 				where m.empname = e.empname);
 
 -- Problem 10)
--- only selects one max
-SELECT unitname, max(num_emps)
-    FROM (SELECT unitname,  count(*) as num_emps
-            FROM employee_units
-            GROUP BY unitname);
-
--- only works on MySQL
 SELECT unitname, count(*)
     FROM employee_units 
     GROUP BY unitname
-    having count(*) >= ALL
-        (SELECT count(*)
-            FROM employee_units
-            GROUP BY unitname);
+    having count(*) >=
+        (SELECT max(num_emps)
+    		FROM (SELECT unitname,  count(*) as num_emps
+            		FROM employee_units
+            		GROUP BY unitname));
