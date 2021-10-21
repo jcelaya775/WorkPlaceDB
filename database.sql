@@ -161,6 +161,13 @@ SELECT DISTINCT mgrname
     		ON me.empname = e.empname
         	AND me.mcity = e.city;
 
+-- alternate solution
+SELECT DISTINCT mgrname
+	FROM manages m, employee e1, employee e2
+    	WHERE m.mgrname = e1.empname
+        	AND m.empname = e2.empname
+            AND e1.city = e2.city;
+
 -- Problem 10)
 SELECT unitname, count(*)
     FROM employee_units 
