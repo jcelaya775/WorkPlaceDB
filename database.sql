@@ -8,10 +8,10 @@ CREATE TABLE employee (
 INSERT INTO employee VALUES
     ("Steve", "Chicago", 45000),
     ("Jonathan", "Newark", 50000),
-    ("Angela", "Brooklyn", 65000),
+    ("Angela", "Boston", 65000),
     ("Nick", "Jersey City", 85000),
     ("Mark", "Jersey City", 55000),
-    ("Pat", "New York City", 60000),
+    ("Pat", "Jersey Ciy", 60000),
     ("Rochelle", "Jersey City", 55000),
     ("Jamie", "Manhattan", 60000),
     ("Dennis", "San Jose", 50000),
@@ -142,29 +142,24 @@ SELECT empname
      	FROM works);
 
 -- Problem 9)
-SELECT mgrname, empname
-    FROM manages m
-    where exists
-    (SELECT mgrname, city as mgrcity
-            FROM employee_units e
-            where m.empname = e.empname
-       UNION 
-            SELECT m.empname, city as empcity
-                FROM employee_units e
-				where m.empname = e.empname);
+CREATE view managed_employees AS
+    SELECT m.empname, mgrname, city AS mcity    
+        FROM manages m JOIN employee e
+            ON m.mgrname = e.empname;
 
-SELECT distinct *
-    FROM manages m join employee_units eu
-    	on m.mgrname = eu.empname
-        	or m.empname = eu.empname
-    and exists
-    (SELECT mgrname, city as mgrcity
-            FROM employee_units e
-            where m.empname = e.empname
-       UNION 
-            SELECT m.empname, city as empcity
-                FROM employee_units e
-				where m.empname = e.empname);
+SELECT DISTINCT mgrname
+	FROM managed_employees me JOIN employee e
+    	ON me.empname = e.empname
+        	AND me.mcity = e.city;
+
+-- or, without views:
+SELECT DISTINCT mgrname
+	FROM (SELECT m.empname, mgrname, city AS mcity    
+        	FROM manages m JOIN employee e
+            ON m.mgrname = e.empname) as me 
+        JOIN employee as e
+    		ON me.empname = e.empname
+        	AND me.mcity = e.city;
 
 -- Problem 10)
 SELECT unitname, count(*)
