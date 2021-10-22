@@ -11,15 +11,11 @@ INSERT INTO employee VALUES
     ("Angela", "Boston", 65000),
     ("Nick", "Jersey City", 85000),
     ("Mark", "Jersey City", 55000),
-    ("Pat", "Jersey City", 60000),
+    ("Pat", "Jersey Ciy", 60000),
     ("Rochelle", "Jersey City", 55000),
     ("Jamie", "Manhattan", 60000),
     ("Dennis", "San Jose", 50000),
-    ("Brianna", "Boston", 85000),
-    ("John", "Austin", 40000),
-    ("Doe", "Houston", 45000),
-    ("Alex", "Denver", 0),
-    ("Greg", "Chicago", 0);
+    ("Brianna", "Boston", 85000);
 
 CREATE TABLE unit (
     unitname VARCHAR(25),
@@ -33,8 +29,7 @@ INSERT INTO unit VALUES
     ("Marketing", "Chicago"),
     ("Communications", "San Francisco"),
     ("Network Security", "Boston"),
-    ("Sales", "Austin"),
-    ("Distribution", "Arlington");
+    ("something", "Alabama");
 
 CREATE TABLE works (
     empname VARCHAR(10),
@@ -48,20 +43,14 @@ INSERT INTO works VALUES
     ("Steve", "Marketing"),
     ("Jonathan", "Analytics"),
     ("Angela", "Development"),
-    ("Angela", "Analytics")
     ("Nick", "Analytics"),
     ("Mark", "Network Security"),
-    ("Mark", "Analytics")
     ("Pat", "Analytics"),
-    ("Pat", "Development"),
     ("Rochelle", "Development"),
     ("Jamie", "Development"),
     ("Dennis", "Communications"),
     ("Brianna", "Network Security"),
-    ("Brianna", "Development"),
-    ("John", "Sales"),
-    ("John", "Distribution"),
-    ("Doe", "Distribution");
+    ("Brianna", "Development");
     
 CREATE TABLE manages (
     empname VARCHAR(25),
@@ -133,14 +122,14 @@ SELECT empname
     WHERE not EXISTS
         (SELECT city
             FROM unit u
-            WHERE u.city like "A%"
+            WHERE city like "A%"
          EXCEPT
-            SELECT u.city 
+            SELECT city 
                 FROM unit u
                 WHERE u.unitname = e.unitname);
 
 -- Problem 7)
-SELECT unitname
+SELECT unitname, count(*)
     FROM works 
     GROUP BY unitname
     HAVING count(*) < 5;
