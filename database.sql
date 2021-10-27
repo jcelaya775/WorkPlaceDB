@@ -48,10 +48,10 @@ INSERT INTO works VALUES
     ("Steve", "Marketing"),
     ("Jonathan", "Analytics"),
     ("Angela", "Development"),
-    ("Angela", "Analytics")
+    ("Angela", "Analytics"),
     ("Nick", "Analytics"),
     ("Mark", "Network Security"),
-    ("Mark", "Analytics")
+    ("Mark", "Analytics"),
     ("Pat", "Analytics"),
     ("Pat", "Development"),
     ("Rochelle", "Development"),
@@ -130,14 +130,14 @@ SELECT empname, city, salary * 1.10, unitname
 -- Problem 6)
 SELECT empname
     FROM employee_units e
-    WHERE not EXISTS
-        (SELECT city
-            FROM unit u
-            WHERE u.city like "A%"
+    WHERE NOT EXISTS
+        (SELECT unitname
+            FROM unit
+            WHERE city LIKE "A%"
          EXCEPT
-            SELECT u.city 
-                FROM unit u
-                WHERE u.unitname = e.unitname);
+         SELECT unitname 
+            FROM unit u
+            WHERE e.unitname = u.unitname;
 
 -- Problem 7)
 SELECT unitname
@@ -180,7 +180,7 @@ SELECT DISTINCT mgrname
             AND e1.city = e2.city;
 
 -- Problem 10)
-SELECT unitname, count(*)
+SELECT unitname, count(*) as num_emps
     FROM employee_units 
     GROUP BY unitname
     having count(*) >=
