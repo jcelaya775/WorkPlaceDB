@@ -129,15 +129,15 @@ SELECT empname, city, salary * 1.10, unitname
 
 -- Problem 6)
 SELECT empname
-    FROM employee_units e
+    FROM employee e
     WHERE NOT EXISTS
-        (SELECT unitname
-            FROM unit
+        (SELECT u.unitname
+            FROM unit u
             WHERE city LIKE "A%"
          EXCEPT
          SELECT unitname 
-            FROM unit u
-            WHERE e.unitname = u.unitname;
+            FROM works w
+            WHERE e.empname = w.empname);
 
 -- Problem 7)
 SELECT unitname
